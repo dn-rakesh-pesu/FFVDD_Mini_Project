@@ -1,0 +1,24 @@
+// Simple Ethernet MAC DUT (Transmit + Receive loopback)
+module ethernet_mac_dut (
+    input  logic        clk,
+    input  logic        rst_n,
+    input  logic [47:0] tx_data,
+    input  logic        tx_valid,
+    output logic [47:0] rx_data,
+    output logic        rx_valid
+);
+
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      rx_data  <= '0;
+      rx_valid <= 0;
+    end else begin
+      if (tx_valid) begin
+        rx_data  <= tx_data;   // simple loopback behavior
+        rx_valid <= 1;
+      end else begin
+        rx_valid <= 0;
+      end
+    end
+  end
+endmodule
